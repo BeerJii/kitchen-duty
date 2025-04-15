@@ -1,0 +1,170 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Pacifico&display=swap');
+
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  background-color: #f1e9df;
+  font-family: 'Inter', sans-serif;
+}
+
+#root {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+h1.title {
+  font-family: 'Pacifico', cursive;
+  text-align: center;
+  color: #3e2c23;
+  font-size: 65px;
+  margin-top: 30px;
+  margin-bottom: 5px;
+}
+
+.app-container {
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 40px;
+  padding: 60px;
+  background-color: #f1e9df;
+}
+
+.item-card {
+  background: #fdf5ed;
+  border-radius: 16px;
+  padding: 20px;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-height: 360px;
+  height: fit-content;
+  justify-content: flex-start;
+  position: relative;
+}
+
+.delete-icon {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  cursor: pointer;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.15);
+  transition: background-color 0.2s ease;
+}
+
+.delete-icon:hover {
+  background-color: #b02a37;
+}
+
+.item-image {
+  width: 200px;
+  height: 200px;
+  object-fit: contain;
+  margin-bottom: 16px;
+}
+
+.item-name {
+  font-weight: 600;
+  font-size: 18px;
+  margin: 8px 0 12px;
+}
+
+.item-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #f2f2f2;
+  border-radius: 12px;
+  padding: 8px 12px;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.item-controls button {
+  font-size: 16px;
+  padding: 6px 12px;
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.item-controls span {
+  font-weight: bold;
+  min-width: 24px;
+  text-align: center;
+}
+
+.update-btn {
+  padding: 8px 12px;
+  font-size: 15px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-bottom: 10px;
+  width: 100%;
+}
+
+.total-display {
+  font-size: 15px;
+  font-weight: 600;
+  color: #333;
+  margin-top: 16px;
+  text-align: center;
+}
+
+.add-card {
+  justify-content: flex-start;
+  padding: 24px;
+  color: #333;
+  cursor: pointer;
+  height: fit-content;
+  background: #fdf5ed;
+}
+
+.add-symbol {
+  font-size: 32px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.add-card input[type="text"],
+.add-card input[type="file"] {
+  width: 100%;
+  margin: 6px 0;
+  padding: 8px;
+  font-size: 14px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+.add-card button {
+  padding: 8px 12px;
+  font-size: 14px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  margin-top: 10px;
+  cursor: pointer;
+}
+
+.add-card button:hover {
+  background-color: #0056b3;
+}
