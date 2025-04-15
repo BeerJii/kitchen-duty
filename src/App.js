@@ -1,18 +1,20 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './App.css';
+import { db, ref, set, onValue, remove } from './firebase';
+import { v4 as uuidv4 } from 'uuid';
 
-function ItemBox({ name, image, count, total, setCount, onUpdate, onDelete }) {
+function ItemBox({ id, name, image, count, total, setCount, onUpdate, onDelete }) {
   return (
     <div className="item-card">
-      <button className="delete-icon" onClick={onDelete}>×</button>
+      <button className="delete-icon" onClick={() => onDelete(id)}>×</button>
       {image && <img src={image} alt={name} className="item-image" />}
       <div className="item-name">{name}</div>
       <div className="item-controls">
-        <button onClick={() => setCount(Math.max(0, count - 1))}>-</button>
+        <button onClick={() => setCount(id, count - 1)}>-</button>
         <span>{count}</span>
-        <button onClick={() => setCount(count + 1)}>+</button>
+        <button onClick={() => setCount(id, count + 1)}>+</button>
       </div>
-      <button className="update-btn" onClick={onUpdate}>Update</button>
+      <button className="update-btn" onClick={() => onUpdate(id)}>Update</button>
     </div>
   );
 }
@@ -57,57 +59,59 @@ function AddItemBox({ onAdd }) {
 }
 
 function App() {
-  const [items, setItems] = useState([
-    {
-      name: 'Soap',
-      count: 0,
-      total: 0,
-      image: process.env.PUBLIC_URL + '/soap.png'
-    },
-    {
-      name: 'Sponge',
-      count: 0,
-      total: 0,
-      image: process.env.PUBLIC_URL + '/sponge.png'
-    },
-  ]);
+  const [items, setItems] = useState({});
 
-  const updateCount = (index, newCount) => {
-    const updated = [...items];
-    updated[index].count = newCount;
-    setItems(updated);
+  useEffect(() => {
+    const itemsRef = ref(db, 'items');
+    onValue(itemsRef, (snapshot) => {
+      const data = snapshot.val();
+      setItems(data || {});
+    });
+  }, []);
+
+  const updateCount = (id, newCount) => {
+    set(ref(db, 'items/' + id + '/count'), newCount);
   };
 
-  const handleUpdate = (index) => {
-    const updated = [...items];
-    updated[index].total += updated[index].count;
-    updated[index].count = 0;
-    setItems(updated);
+  const handleUpdate = (id) => {
+    const item = items[id];
+    const newTotal = Math.max(0, item.total + item.count);
+    set(ref(db, 'items/' + id), {
+      ...item,
+      total: newTotal,
+      count: 0
+    });
   };
 
-  const handleDelete = (index) => {
-    const updated = items.filter((_, i) => i !== index);
-    setItems(updated);
+  const handleDelete = (id) => {
+    remove(ref(db, 'items/' + id));
   };
 
   const addItem = (name, image) => {
-    setItems([...items, { name, count: 0, total: 0, image }]);
+    const id = uuidv4();
+    set(ref(db, 'items/' + id), {
+      name,
+      image,
+      count: 0,
+      total: 0
+    });
   };
 
   return (
     <>
       <h1 className="title">Kitchen Duty</h1>
       <div className="app-container">
-        {items.map((item, index) => (
-          <div className="item-wrapper" key={index}>
+        {Object.entries(items).map(([id, item]) => (
+          <div className="item-wrapper" key={id}>
             <ItemBox
+              id={id}
               name={item.name}
               image={item.image}
               count={item.count}
               total={item.total}
-              setCount={(newCount) => updateCount(index, newCount)}
-              onUpdate={() => handleUpdate(index)}
-              onDelete={() => handleDelete(index)}
+              setCount={updateCount}
+              onUpdate={handleUpdate}
+              onDelete={handleDelete}
             />
             <div className="total-display">Total: {item.total}</div>
           </div>
